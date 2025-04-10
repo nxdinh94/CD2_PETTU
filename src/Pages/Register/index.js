@@ -47,7 +47,7 @@ function Register() {
             }, 1000);
         } else {
             const error = { ...res };
-            Object.keys(error).map((item, index) => toast.error(res[item]));
+            // Object.keys(error).map((item, index) => toast.error(res[item]));
         }
     };
 

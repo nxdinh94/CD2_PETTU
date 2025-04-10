@@ -31,6 +31,8 @@ function Login() {
 
         if (res.status) {
             const userData = res.user_data;
+            localStorage.setItem("sessionUser", JSON.stringify(userData));
+            localStorage.setItem('isLogin', res.status);
             sessionStorage.setItem('user_data', JSON.stringify(userData));
             sessionStorage.setItem('isLogin', res.status);
             toast.success(res.message);

@@ -105,6 +105,7 @@
             .bill-detail-qr {
                 display: flex;
                 flex-direction: column;
+                width: 80%;
                 &.hidden {
                     visibility: hidden;
                 }

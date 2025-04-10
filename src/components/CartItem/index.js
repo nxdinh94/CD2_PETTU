@@ -59,7 +59,7 @@ function CartItem({ ...props }) {
             checkIndex = paymentProduct.findIndex((item) => item.id == targetId);
             dispatch(deleteProductFromBill({ index: checkIndex }));
         } else {
-            dispatch(addProductToBill({ id: targetId, quantity: productQuantity, intoMoney: intoMoney }));
+            dispatch(addProductToBill({ id: targetId,name: product_name ,quantity: productQuantity, intoMoney: intoMoney }));
         }
     };
 

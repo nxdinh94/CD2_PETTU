@@ -9,9 +9,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteAllProductFromBill } from '~/Pages/Payment/PaymentSlices';
 import CartItem from '~/components/CartItem';
 import configureRoute from '~/config/routes';
+import checkLogin from '~/utils/checkLogin';
 function OrderStatus() {
-    let user_data = JSON.parse(sessionStorage.user_data);
-    let userId = user_data.id;
+    let isLogin = localStorage.isLogin
+    let userId = '';
+    // console.log(isLogin);
+    if (isLogin) {
+        const user_data = JSON.parse(localStorage.sessionUser);
+        userId = user_data.id;
+    }
     const productData = useSelector((state) => state.storeSlices.value);
     const [listPurchase, setListPurchase] = useState([]);
     // console.log(listProductsInCart);

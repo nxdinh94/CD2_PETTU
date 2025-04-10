@@ -1,14 +1,13 @@
-import './BottomBarCart.scss';
 import configureRoute from '~/config/routes';
-import { deleteAllProductFromBill, deleteProductFromBill } from '~/Pages/Payment/PaymentSlices';
+import './BottomBarCart.scss';
 
-import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Toastify from '~/components/Toastify';
 function BottomBarCart() {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const { t } = useTranslation();
     const [totalPrice, setTotalPrice] = useState(0);
     const paymentProduct = useSelector((state) => state.paymentSlices.value);

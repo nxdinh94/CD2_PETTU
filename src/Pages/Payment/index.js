@@ -10,12 +10,16 @@ import CartItem from '~/components/CartItem';
 import { toast } from 'react-toastify';
 import Toastify from '~/components/Toastify';
 import configureRoute from '~/config/routes';
+import { handleSendVerifyBillEmail } from '~/utils/apiSendVerifyBillEmail';
+import checkLogin from '~/utils/checkLogin';
+import StripePaymentForm from './stripePayment';
+import { convertVNDToUSD } from '~/utils/vndToUsd';
 function Payment() {
     let user_data = '';
     const [dataBillDetail, setDataBillDetail] = useState([]);
     const [paymentMethod, setPaymentMethod] = useState('');
     const [isChosePaymentMethod, setIsChosePaymentMethod] = useState(false);
-    const [classForPaymentQr, setClassForPaymentQr] = useState('bill-detail-qr');
+    const [classForPaymentQr, setClassForPaymentQr] = useState('bill-detail-qr hidden');
     const [billId, setBillId] = useState(0);
     const transport_fee = 0;
     let paymentPrice = 0;
@@ -30,6 +34,7 @@ function Payment() {
 
     const handleOnchangeRadio = (e) => {
         const target = e.target.value;
+        console.log(target)
         setPaymentMethod(target);
     };
     const handleBeforeUnload = (event) => {
@@ -44,12 +49,33 @@ function Payment() {
         }
     };
     const handlePaymentBtn = async (userid, paymentmethod, paymentproduct) => {
+        console.log(paymentproduct)
         if (!paymentmethod) {
             toast.error('Vui lòng chọn phương thức thành toán');
         } else {
             const res = await handleAddToBill(userid, paymentproduct, paymentmethod, billId);
             // console.log(res);
             if (res.status) {
+                 let isLogin = checkLogin();
+                let customer_name = user_data.fullname;
+                let email = user_data.email;
+                // console.log(isLogin);
+                if (isLogin) {
+                    const user_data = JSON.parse(sessionStorage.user_data);
+                    email = user_data.email;
+                    customer_name = user_data.fullname;
+                }
+                const data = {
+                    "customer_name": customer_name,
+                    "email": email,
+                    "shop_name": "Pettu",
+                    "tracking_url" : "http://localhost:3000/purchase",
+                    "delivery_address": user_data.delivery_address,
+                    "items": paymentProduct.slice(1)
+                  };
+                const res2 = await handleSendVerifyBillEmail(data).catch((err) => {
+                    toast.error('Gửi email xác nhận thất bại');
+                });
                 setIsChosePaymentMethod(true);
                 toast.success(res.message);
                 setTimeout(() => {
@@ -61,8 +87,8 @@ function Payment() {
     };
     // console.log(paymentProduct);
     useEffect(() => {
-        if (paymentMethod !== 'Momo') {
-            setClassForPaymentQr('bill-detail-qr hidden');
+        if (paymentMethod !== '') {
+            setClassForPaymentQr('bill-detail-qr');
         } else setClassForPaymentQr('bill-detail-qr');
     }, [paymentMethod]);
     useEffect(() => {
@@ -148,8 +174,8 @@ function Payment() {
                             </FormGroup>
                             <FormGroup check inline>
                                 <Label check>
-                                    <Input onChange={handleOnchangeRadio} value={'COD'} type="radio" name="radio1" />
-                                    COD
+                                    <Input onChange={handleOnchangeRadio} value={'Stripe'} type="radio" name="radio1" />
+                                    Stripe
                                 </Label>
                             </FormGroup>
                             <FormGroup check inline>
@@ -171,11 +197,23 @@ function Payment() {
             <Container className="payment-bill">
                 <Row>
                     <div className="bill-detail-wrapper">
+                        {paymentMethod === 'Momo'  ?
                         <div className={classForPaymentQr}>
-                            <img src="/images/qr-momo.jpg" alt="image" />
+                            <img src="/images/qr-momo.jpg" alt="qr-momo" />
                             <span> Quý khách vui lòng thanh toán qua mã QR.</span>
+                        </div>: 
+                        <div className={classForPaymentQr}>
+                            <StripePaymentForm 
+                                money={convertVNDToUSD(paymentPrice)} 
+                                currency={'usd'} 
+                                onClick={handlePaymentBtn}
+                                userId={userId}
+                                paymentMethod={paymentMethod}
+                                paymentProduct={paymentProduct}
+                            />
                         </div>
-
+                        }
+                        
                         <div className="bill-detail-infor">
                             <ul>
                                 <li>
@@ -197,14 +235,14 @@ function Payment() {
                                     </span>
                                 </li>
                             </ul>{' '}
-                            <button
+                            {/* <button
                                 onClick={() => {
                                     handlePaymentBtn(userId, paymentMethod, paymentProduct);
                                 }}
                                 className="btn-buy"
                             >
                                 <span>Thanh toán</span>
-                            </button>
+                            </button> */}
                         </div>
                     </div>
                 </Row>

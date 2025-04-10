@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
-    value: [{ id: 0, quantity: 0, intoMoney: 0 }],
+    value: [{ id: 0, productName:"" , quantity: 0, intoMoney: 0 }],
     status: 'idle',
 };
 // export const handleFetchAllTeamThunk = createAsyncThunk('TeamSlices/handleFetchAllTeamThunk', async () => {});
@@ -16,7 +16,7 @@ export const PaymentSlices = createSlice({
             state.value.splice(action.payload.index, 1);
         },
         deleteAllProductFromBill: (state) => {
-            state.value = [{ id: 0, quantity: 0, intoMoney: 0 }];
+            state.value = [{ id: 0, productName: "" ,quantity: 0, intoMoney: 0 }];
         },
     },
     // extraReducers: (builder) => {
