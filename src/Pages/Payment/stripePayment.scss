@@ -23,7 +23,7 @@
     background: #fafafa;
 }
 
-button {
+.btn-button {
     margin-top: 20px;
     padding: 10px 20px;
     background: #6772e5;
@@ -35,12 +35,12 @@ button {
     transition: 0.3s;
 }
 
-button:disabled {
+.btn-button:disabled {
     background: #ccc;
     cursor: not-allowed;
 }
 
-button:hover {
+.btn-button:hover {
     background: #5469d4;
 }
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { myStripePaymentApi } from "~/utils/stripePayment";
+import { myStripePaymentApi } from "~/axios_node";
 import "./stripePayment.scss";
 
 
