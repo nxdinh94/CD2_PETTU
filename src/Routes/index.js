@@ -1,5 +1,6 @@
-import configRoutes from '~/config/routes';
 
+
+import configRoutes from '~/config/routes';
 import Home from '~/Pages/Home';
 import Service from '~/Pages/Service';
 import ServiceDetail from '~/Pages/ServiceDetail';
@@ -12,7 +13,6 @@ import Admin from '~/Pages/Admin';
 import Profile from '~/Pages/Profile';
 import Store from '~/Pages/Store';
 import StoreDetail from '~/Pages/StoreDetail';
-import Gallery from '~/Pages/Gallery/';
 import Team from '~/Pages//Team';
 import TeamDetail from '~/Pages/TeamDetail';
 import Page404 from '~/Pages/Page404';
@@ -34,7 +34,6 @@ const publicRoutes = [
     { path: configRoutes.profile, component: Profile },
     { path: configRoutes.store, component: Store },
     { path: configRoutes.storeDetail, component: StoreDetail },
-    { path: configRoutes.gallery, component: Gallery },
     { path: configRoutes.team, component: Team },
     { path: configRoutes.teamCategory, component: Team },
     { path: configRoutes.teamDetail, component: TeamDetail },
