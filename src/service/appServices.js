@@ -1,7 +1,7 @@
 import axios from '../axios';
 
 export const getAllPets = () => {
-    return axios.get('/backend_pettu/api/pets/petsInfo');
+    return axios.get('/backend_pettu/admin/home/getPetDetailInfo');
 };
 // lay tat ca thanh vien
 export const getAllInTeam = () => {

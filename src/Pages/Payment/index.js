@@ -10,10 +10,8 @@ import CartItem from '~/components/CartItem';
 import { toast } from 'react-toastify';
 import Toastify from '~/components/Toastify';
 import configureRoute from '~/config/routes';
-import { handleSendVerifyBillEmail } from '~/utils/apiSendVerifyBillEmail';
-import checkLogin from '~/utils/checkLogin';
-import StripePaymentForm from './stripePayment';
 import { convertVNDToUSD } from '~/utils/vndToUsd';
+import PayBtn from './PayBtn';
 function Payment() {
     let user_data = '';
     const [dataBillDetail, setDataBillDetail] = useState([]);
@@ -50,32 +48,14 @@ function Payment() {
     };
     const handlePaymentBtn = async (userid, paymentmethod, paymentproduct) => {
         console.log(paymentproduct)
+        console.log(paymentMethod)
         if (!paymentmethod) {
             toast.error('Vui lòng chọn phương thức thành toán');
         } else {
             const res = await handleAddToBill(userid, paymentproduct, paymentmethod, billId);
             // console.log(res);
             if (res.status) {
-                 let isLogin = checkLogin();
-                let customer_name = user_data.fullname;
-                let email = user_data.email;
-                // console.log(isLogin);
-                if (isLogin) {
-                    const user_data = JSON.parse(sessionStorage.user_data);
-                    email = user_data.email;
-                    customer_name = user_data.fullname;
-                }
-                const data = {
-                    "customer_name": customer_name,
-                    "email": email,
-                    "shop_name": "Pettu",
-                    "tracking_url" : "http://localhost:3000/purchase",
-                    "delivery_address": user_data.delivery_address,
-                    "items": paymentProduct.slice(1)
-                  };
-                const res2 = await handleSendVerifyBillEmail(data).catch((err) => {
-                    toast.error('Gửi email xác nhận thất bại');
-                });
+        
                 setIsChosePaymentMethod(true);
                 toast.success(res.message);
                 setTimeout(() => {
@@ -174,22 +154,11 @@ function Payment() {
                             </FormGroup>
                             <FormGroup check inline>
                                 <Label check>
-                                    <Input onChange={handleOnchangeRadio} value={'Stripe'} type="radio" name="radio1" />
-                                    Stripe
+                                    <Input onChange={handleOnchangeRadio} value={'Vnpay'} type="radio" name="radio1" />
+                                    VNPay
                                 </Label>
                             </FormGroup>
-                            <FormGroup check inline>
-                                <Label check>
-                                    <Input
-                                        onChange={handleOnchangeRadio}
-                                        value={'tknh'}
-                                        type="radio"
-                                        name="radio1"
-                                        disabled
-                                    />
-                                    Thẻ Ngân Hàng
-                                </Label>
-                            </FormGroup>
+                        
                         </FormGroup>
                     </div>
                 </Row>
@@ -203,7 +172,7 @@ function Payment() {
                             <span> Quý khách vui lòng thanh toán qua mã QR.</span>
                         </div>: 
                         <div className={classForPaymentQr}>
-                            <StripePaymentForm 
+                            <PayBtn 
                                 money={convertVNDToUSD(paymentPrice)} 
                                 currency={'usd'} 
                                 onClick={handlePaymentBtn}

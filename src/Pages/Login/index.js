@@ -24,7 +24,8 @@ function Login() {
     const handleLogin = async (emaill, passwordd) => {
         setIsHandlingLogin(true);
         let res = await handleLoginApi(emaill, passwordd);
-        // console.log(res);
+
+        console.log(res);
         setTimeout(() => {
             setIsHandlingLogin(false);
         }, 800);
@@ -44,8 +45,8 @@ function Login() {
             }, 2500);
         } else {
             toast.error(res.message);
-            sessionStorage.setItem('user_data', '{}');
-            sessionStorage.setItem('isLogin', res.status);
+            // sessionStorage.setItem('user_data', '{}');
+            // sessionStorage.setItem('isLogin', res.status);
         }
     };
 
