@@ -3,7 +3,12 @@ import './PurchaseOrder.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
-import { handleGetAllPendingBill, handlGetAllApproveBill } from '~/service/userService';
+import {
+    handleGetAllPendingBill,
+    handlGetAllApproveBill,
+    handlGetAllDeliveryBill,
+    handlGetAllShippedBill,
+} from '~/service/userService';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteAllProductFromBill } from '~/Pages/Payment/PaymentSlices';
@@ -11,7 +16,7 @@ import CartItem from '~/components/CartItem';
 import configureRoute from '~/config/routes';
 import checkLogin from '~/utils/checkLogin';
 function OrderStatus() {
-    let isLogin = localStorage.isLogin
+    let isLogin = localStorage.isLogin;
     let userId = '';
     // console.log(isLogin);
     if (isLogin) {
@@ -47,9 +52,12 @@ function OrderStatus() {
                             <ul>
                                 <li>
                                     <button
-                                        onClick={() => {
+                                        onClick={async () => {
                                             handleButtonClick(1);
-                                            fetchData(userId);
+                                            // fetchData(userId);
+                                            // dispatch(deleteAllProductFromBill());
+                                            const res = await handleGetAllPendingBill(userId);
+                                            setListPurchase(res);
                                             dispatch(deleteAllProductFromBill());
                                         }}
                                         className={activeButton === 1 ? 'active' : ''}
@@ -72,9 +80,11 @@ function OrderStatus() {
                                 </li>
                                 <li>
                                     <button
-                                        onClick={() => {
+                                        onClick={async () => {
                                             handleButtonClick(3);
-                                            setListPurchase({ status: false });
+                                            const res = await handlGetAllDeliveryBill(userId);
+                                            setListPurchase(res);
+                                            dispatch(deleteAllProductFromBill());
                                         }}
                                         className={activeButton === 3 ? 'active' : ''}
                                     >
@@ -83,9 +93,11 @@ function OrderStatus() {
                                 </li>
                                 <li>
                                     <button
-                                        onClick={() => {
+                                        onClick={async () => {
                                             handleButtonClick(4);
-                                            setListPurchase({ status: false });
+                                            const res = await handlGetAllShippedBill(userId);
+                                            setListPurchase(res);
+                                            dispatch(deleteAllProductFromBill());
                                         }}
                                         className={activeButton === 4 ? 'active' : ''}
                                     >

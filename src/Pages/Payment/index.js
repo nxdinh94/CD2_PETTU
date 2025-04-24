@@ -32,7 +32,7 @@ function Payment() {
 
     const handleOnchangeRadio = (e) => {
         const target = e.target.value;
-        console.log(target)
+        console.log(target);
         setPaymentMethod(target);
     };
     const handleBeforeUnload = (event) => {
@@ -46,21 +46,29 @@ function Payment() {
             return message; // For some older browsers
         }
     };
-    const handlePaymentBtn = async (userid, paymentmethod, paymentproduct) => {
-        console.log(paymentproduct)
-        console.log(paymentMethod)
+    const handlePaymentBtn = async (userid, paymentmethod) => {
+        console.log(paymentMethod);
         if (!paymentmethod) {
             toast.error('Vui lòng chọn phương thức thành toán');
         } else {
-            const res = await handleAddToBill(userid, paymentproduct, paymentmethod, billId);
-            // console.log(res);
+            const res = await handleAddToBill(userid, paymentmethod, billId);
+            console.log(res);
             if (res.status) {
-        
-                setIsChosePaymentMethod(true);
-                toast.success(res.message);
-                setTimeout(() => {
-                    window.location.href = configureRoute.cart;
-                }, 1500);
+                const paymentMethodRes = res.payment_method.toLowerCase();
+                if (paymentMethodRes === 'vnpay') {
+                    setIsChosePaymentMethod(true);
+                    setTimeout(() => {
+                        // window.location.href = configureRoute.cart;
+                        window.location.href = res.data;
+                    }, 500);
+                } else if (paymentMethodRes === 'cod') {
+                    setIsChosePaymentMethod(true);
+                    toast.success('Đặt hàng thành công, vui lòng kiểm tra lại thông tin đơn mua');
+                    setTimeout(() => {
+                        window.location.href = configureRoute.purchaseOrder;
+                    }, 500);
+                }
+
                 // window.removeEventListener('beforeunload', handleBeforeUnload);
             }
         }
@@ -71,13 +79,13 @@ function Payment() {
             setClassForPaymentQr('bill-detail-qr');
         } else setClassForPaymentQr('bill-detail-qr');
     }, [paymentMethod]);
-    useEffect(() => {
-        window.addEventListener('beforeunload', handleBeforeUnload);
+    // useEffect(() => {
+    //     window.addEventListener('beforeunload', handleBeforeUnload);
 
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
-    }, []);
+    //     return () => {
+    //         window.removeEventListener('beforeunload', handleBeforeUnload);
+    //     };
+    // }, []);
     // console.log('billid', billId);
     useEffect(() => {
         const handleAddToBillDetail = async () => {
@@ -122,8 +130,8 @@ function Payment() {
                 <Row>
                     {dataBillDetail.status &&
                         dataBillDetail.data.map((item, key) => {
-                            paymentPrice += item.cartPrice;
-                            priceToPay += item.cartPrice;
+                            paymentPrice += Number(item.cartPrice);
+                            priceToPay += Number(item.cartPrice);
                             return (
                                 <CartItem
                                     key={key}
@@ -148,8 +156,8 @@ function Payment() {
                             <legend>Phương thức thanh toán</legend>
                             <FormGroup check inline style={{ paddingLeft: 0 }}>
                                 <Label check>
-                                    <Input onChange={handleOnchangeRadio} value={'Momo'} type="radio" name="radio1" />
-                                    Momo
+                                    <Input onChange={handleOnchangeRadio} value={'Cod'} type="radio" name="radio1" />
+                                    Thanh toán khi nhận hàng
                                 </Label>
                             </FormGroup>
                             <FormGroup check inline>
@@ -158,7 +166,6 @@ function Payment() {
                                     VNPay
                                 </Label>
                             </FormGroup>
-                        
                         </FormGroup>
                     </div>
                 </Row>
@@ -166,23 +173,24 @@ function Payment() {
             <Container className="payment-bill">
                 <Row>
                     <div className="bill-detail-wrapper">
-                        {paymentMethod === 'Momo'  ?
-                        <div className={classForPaymentQr}>
-                            <img src="/images/qr-momo.jpg" alt="qr-momo" />
-                            <span> Quý khách vui lòng thanh toán qua mã QR.</span>
-                        </div>: 
-                        <div className={classForPaymentQr}>
-                            <PayBtn 
-                                money={convertVNDToUSD(paymentPrice)} 
-                                currency={'usd'} 
-                                onClick={handlePaymentBtn}
-                                userId={userId}
-                                paymentMethod={paymentMethod}
-                                paymentProduct={paymentProduct}
-                            />
-                        </div>
-                        }
-                        
+                        {paymentMethod === 'Momo' ? (
+                            <div className={classForPaymentQr}>
+                                <img src="/images/qr-momo.jpg" alt="qr-momo" />
+                                <span> Quý khách vui lòng thanh toán qua mã QR.</span>
+                            </div>
+                        ) : (
+                            <div className={classForPaymentQr}>
+                                <PayBtn
+                                    money={convertVNDToUSD(paymentPrice)}
+                                    currency={'usd'}
+                                    onClick={handlePaymentBtn}
+                                    userId={userId}
+                                    paymentMethod={paymentMethod}
+                                    // paymentProduct={paymentProduct}
+                                />
+                            </div>
+                        )}
+
                         <div className="bill-detail-infor">
                             <ul>
                                 <li>

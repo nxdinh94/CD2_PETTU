@@ -37,11 +37,11 @@ export const addToBillDetail = (userId, paymentProduct) => {
     );
 };
 // buoc thanh toan
-export const handleAddToBill = (userId, paymentProduct, paymentMethod, billId) => {
-    console.log(userId, paymentProduct, paymentMethod, billId);
+export const handleAddToBill = (userId, paymentMethod, billId) => {
+    console.log(userId, paymentMethod, billId);
     return axios.post(
         '/backend_pettu/api/users/paymentCart',
-        { userId: userId, payment_method: paymentMethod, paymentProduct: paymentProduct, billId: billId },
+        { userId: userId, payment_method: paymentMethod, billId: billId },
         {
             headers: {
                 'Content-Type': 'application/json',
