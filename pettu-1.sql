@@ -32,8 +32,8 @@ CREATE TABLE `bill` (
   `userid` int(20) DEFAULT NULL,
   `payment_method` varchar(20) DEFAULT NULL,
   `total_price` float DEFAULT NULL,
-  `status` int(4) DEFAULT 0,
-  `payment_status` int(4) DEFAULT 0,
+  `status` ENUM('pending','confirmed','shipped','delivery','cancelled') NOT NULL DEFAULT 'pending',
+  `payment_status` ENUM('pending','paid','failed') NOT NULL DEFAULT 'pending',
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
@@ -42,8 +42,10 @@ CREATE TABLE `bill` (
 -- Đang đổ dữ liệu cho bảng `bill`
 --
 
-INSERT INTO `bill` (`billid`, `userid`, `payment_method`, `total_price`, `status`, `payment_status`, `created_at`, `updated_at`) VALUES
-(182, 19, 'COD', 595000, 0, 0, '2024-01-02 04:10:24', '2024-01-02 10:10:24');
+INSERT INTO `bill` 
+(`billid`, `userid`, `payment_method`, `total_price`, `status`, `payment_status`, `created_at`, `updated_at`) 
+VALUES 
+(182, 19, 'COD', 595000, 'pending', 'pending', '2024-01-02 04:10:24', '2024-01-02 10:10:24');
 
 -- --------------------------------------------------------
 

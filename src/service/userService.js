@@ -2,9 +2,9 @@ import axios from '../axios';
 
 export function handleLoginApi(email, password) {
     return axios.post('/backend_pettu/api/login', `username=${email}&password=${password}`, {
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    },
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
     });
 }
 export function handleRegisterApi(fullName, email, password, rePassword) {
@@ -152,6 +152,20 @@ export function handleGetAllPendingBill(userId) {
 }
 export function handlGetAllApproveBill(userId) {
     return axios.post('/backend_pettu/api/users/getApprovedBill', `userId=${userId}`, {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+    });
+}
+export function handlGetAllShippedBill(userId) {
+    return axios.post('/backend_pettu/api/users/getShippedBill', `userId=${userId}`, {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+    });
+}
+export function handlGetAllDeliveryBill(userId) {
+    return axios.post('/backend_pettu/api/users/getDeliveryBill', `userId=${userId}`, {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
