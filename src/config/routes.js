@@ -19,6 +19,7 @@ const routes = {
     payment: '/store/cart/payment',
     page404: '*',
     purchaseOrder: '/purchase',
+    serviceSurvey: '/survey',
 
     admin: '/admin/:slug',
     adminHomePage: '/admin/homepage',

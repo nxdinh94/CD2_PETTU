@@ -1,5 +1,3 @@
-
-
 import configRoutes from '~/config/routes';
 import Home from '~/Pages/Home';
 import Service from '~/Pages/Service';
@@ -19,6 +17,7 @@ import Page404 from '~/Pages/Page404';
 import Cart from '~/Pages/Cart';
 import Payment from '~/Pages/Payment';
 import PurchaseOrder from '~/Pages/PurchaseOrder';
+import ServiceSurvey from '~/Pages/ServiceSurvey';
 
 const publicRoutes = [
     { path: configRoutes.home, component: Home, isHome: true },
@@ -41,6 +40,7 @@ const publicRoutes = [
     { path: configRoutes.cart, component: Cart },
     { path: configRoutes.payment, component: Payment },
     { path: configRoutes.purchaseOrder, component: PurchaseOrder },
+    { path: configRoutes.serviceSurvey, component: ServiceSurvey, isSurvey: true },
 ];
 const privateRoutes = [];
 export { publicRoutes, privateRoutes };

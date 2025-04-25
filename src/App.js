@@ -4,12 +4,12 @@ import HomeLayout from './components/Layout/HomeLayout';
 import AnotherLayout from './components/Layout/AnotherLayout';
 import EmptyLayout from './components/Layout/EmptyLayout';
 import { publicRoutes } from './Routes';
-import { useEffect } from "react";
+import { useEffect } from 'react';
 import '@n8n/chat/style.css';
 import { createChat } from '@n8n/chat';
 
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import getCurrentPeriodOfDay from './utils/getCurrentPeriodOfDay';
 import checkLogin from './utils/checkLogin';
 
@@ -21,19 +21,19 @@ function App() {
         decentralization_id = useData.decentralization_id;
     }
     useEffect(() => {
-        window.addEventListener("storage", (event) => {
-            if (event.key === "sessionUser") {
-                sessionStorage.setItem("user", event.newValue);
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'sessionUser') {
+                sessionStorage.setItem('user', event.newValue);
                 window.location.reload(); // Làm mới để cập nhật trạng thái người dùng
             }
         });
 
         return () => {
-            window.removeEventListener("storage", () => {});
+            window.removeEventListener('storage', () => {});
         };
     }, []);
     useEffect(() => {
-        if(checkLogin()){
+        if (checkLogin()) {
             // createChat({
             //     webhookUrl: 'http://localhost:5678/webhook/224130ad-98fc-434c-a1ed-52f77768898b/chat',
             //     initialMessages: [
@@ -42,13 +42,13 @@ function App() {
             //     ],
             //     defaultLanguage: 'vi',
             //     allowFileUploads: false,
-            //     loadPreviousSession: true, 
-                        
+            //     loadPreviousSession: true,
             // });
         }
-		
-	}, []);
-    const stripePromise = loadStripe("pk_test_51QxeSSC1Nh1lHc8pKgnEdXgJR5KFXYmVVwybLKamCNpNkWFuvWsP5kR4EABeOJPuZvvMfIW2o8GslhLlLeWdgSSp002lNBeKoQ"); // Replace with your public Stripe key
+    }, []);
+    const stripePromise = loadStripe(
+        'pk_test_51QxeSSC1Nh1lHc8pKgnEdXgJR5KFXYmVVwybLKamCNpNkWFuvWsP5kR4EABeOJPuZvvMfIW2o8GslhLlLeWdgSSp002lNBeKoQ',
+    ); // Replace with your public Stripe key
 
     // console.log('fdsf', useData);
     return (
@@ -65,6 +65,10 @@ function App() {
                             let Layout = AnotherLayout;
                             if (route.isHome) {
                                 Layout = HomeLayout;
+                            }
+
+                            if (route.isSurvey) {
+                                Layout = EmptyLayout;
                             }
 
                             if (route.path.substring(0, 6) === '/admin') {
@@ -91,7 +95,6 @@ function App() {
                 </div>
             </Router>
         </Elements>
-        
     );
 }
 
